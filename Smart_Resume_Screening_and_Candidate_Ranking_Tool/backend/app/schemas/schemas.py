@@ -1,11 +1,45 @@
 """
-Pydantic schemas — these define the API's public contract, separate from the
-ORM models so internal DB structure can change without breaking the API.
+Pydantic schemas — the API's public contract, kept separate from the ORM
+models so internal DB structure can change without breaking clients.
 """
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
+
+# ---------------------------------------------------------------------------
+# Auth
+# ---------------------------------------------------------------------------
+
+class UserRegisterIn(BaseModel):
+    email: EmailStr
+    password: str = Field(min_length=8, max_length=128)
+    full_name: str | None = Field(default=None, max_length=255)
+
+
+class UserLoginIn(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class UserOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    email: EmailStr
+    full_name: str | None
+    created_at: datetime
+
+
+class TokenOut(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: UserOut
+
+
+# ---------------------------------------------------------------------------
+# Candidates & ATS
+# ---------------------------------------------------------------------------
 
 class CandidateOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -23,9 +57,12 @@ class CandidateOut(BaseModel):
 
 class ATSCheckItem(BaseModel):
     name: str
+    category: str
     passed: bool
+    score: float           # 0.0-1.0 satisfaction of this check
+    weight: int            # max points available
+    earned_points: float   # points actually earned
     message: str
-    weight: int
 
 
 class ATSReportOut(BaseModel):
@@ -34,20 +71,20 @@ class ATSReportOut(BaseModel):
     id: int
     candidate_id: int
     overall_score: float
+    category_scores: dict[str, float]
     checks: list[ATSCheckItem]
     suggestions: list[str]
     created_at: datetime
 
 
 class CandidateListItemOut(CandidateOut):
-    """
-    Same shape as CandidateOut plus the candidate's most recent ATS report,
-    nested — mirrors what /api/upload-resume already returns so the
-    frontend's candidate cards work identically whether the candidate came
-    from an upload response or from this list endpoint.
-    """
+    """CandidateOut plus the candidate's most recent ATS report, nested."""
     ats_report: ATSReportOut | None = None
 
+
+# ---------------------------------------------------------------------------
+# Job descriptions & ranking
+# ---------------------------------------------------------------------------
 
 class MatchScoreOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -65,8 +102,8 @@ class MatchScoreOut(BaseModel):
 
 
 class JobDescriptionIn(BaseModel):
-    title: str
-    raw_text: str
+    title: str = Field(min_length=1, max_length=255)
+    raw_text: str = Field(min_length=1)
 
 
 class JobDescriptionOut(BaseModel):
@@ -98,7 +135,9 @@ class RankingResponseOut(BaseModel):
     rankings: list[RankingResultOut]
 
 
-# ---- Skills taxonomy schemas ----
+# ---------------------------------------------------------------------------
+# Skills taxonomy
+# ---------------------------------------------------------------------------
 
 class SkillOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)

@@ -1,32 +1,23 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { listCandidates } from "../services/candidateService";
 import { listJobDescriptions } from "../services/jobService";
+import { useAuth } from "./AuthContext";
 
 /**
- * Now backed by real list endpoints (GET /api/candidates, GET
- * /api/job-descriptions) — the backend is the source of truth, fetched on
- * mount. localStorage is kept only as a best-effort offline cache so the
- * UI isn't empty for a moment on slow connections; it's overwritten by the
- * server response as soon as that arrives.
+ * Holds the signed-in user's candidates and job descriptions.
+ *
+ * Auth-aware by design: it only fetches once a user is authenticated, and
+ * clears state on logout. Without that, a logged-out user's data would linger
+ * in memory and briefly render for whoever logs in next on the same browser.
  */
 const AppDataContext = createContext(null);
 
-const CANDIDATES_KEY = "resume_screener_candidates";
-const JDS_KEY = "resume_screener_jds";
-
-function loadFromStorage(key) {
-  try {
-    const raw = localStorage.getItem(key);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
-}
-
 export function AppDataProvider({ children }) {
-  const [candidates, setCandidates] = useState(() => loadFromStorage(CANDIDATES_KEY));
-  const [jobDescriptions, setJobDescriptions] = useState(() => loadFromStorage(JDS_KEY));
-  const [loading, setLoading] = useState(true);
+  const { isAuthenticated, initializing } = useAuth();
+
+  const [candidates, setCandidates] = useState([]);
+  const [jobDescriptions, setJobDescriptions] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const refresh = useCallback(async () => {
     setLoading(true);
@@ -38,38 +29,44 @@ export function AppDataProvider({ children }) {
       setCandidates(candidatesData);
       setJobDescriptions(jdData);
     } catch {
-      // Backend unreachable — keep whatever was cached in localStorage
-      // rather than wiping the screen, and let ApiStatusPill surface the
-      // outage separately.
+      // Backend unreachable — leave whatever is already rendered in place.
+      // ApiStatusPill surfaces the outage separately, so wiping the screen
+      // here would remove information without adding any.
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    refresh();
-  }, [refresh]);
+    if (initializing) return;
 
-  useEffect(() => {
-    localStorage.setItem(CANDIDATES_KEY, JSON.stringify(candidates));
-  }, [candidates]);
-
-  useEffect(() => {
-    localStorage.setItem(JDS_KEY, JSON.stringify(jobDescriptions));
-  }, [jobDescriptions]);
+    if (isAuthenticated) {
+      refresh();
+    } else {
+      // Logged out (or session expired): drop everything so the next user
+      // on this browser never sees the previous user's candidates.
+      setCandidates([]);
+      setJobDescriptions([]);
+    }
+  }, [isAuthenticated, initializing, refresh]);
 
   const addCandidate = useCallback((candidate, atsReport) => {
-    setCandidates((prev) => {
-      const withoutDupe = prev.filter((c) => c.id !== candidate.id);
-      return [{ ...candidate, ats_report: atsReport }, ...withoutDupe];
-    });
+    setCandidates((prev) => [
+      { ...candidate, ats_report: atsReport },
+      ...prev.filter((c) => c.id !== candidate.id),
+    ]);
   }, []);
 
   const addJobDescription = useCallback((jd) => {
-    setJobDescriptions((prev) => {
-      const withoutDupe = prev.filter((j) => j.id !== jd.id);
-      return [jd, ...withoutDupe];
-    });
+    setJobDescriptions((prev) => [jd, ...prev.filter((j) => j.id !== jd.id)]);
+  }, []);
+
+  const removeCandidate = useCallback((id) => {
+    setCandidates((prev) => prev.filter((c) => c.id !== id));
+  }, []);
+
+  const removeJobDescription = useCallback((id) => {
+    setJobDescriptions((prev) => prev.filter((j) => j.id !== id));
   }, []);
 
   const getCandidateById = useCallback(
@@ -82,13 +79,6 @@ export function AppDataProvider({ children }) {
     [jobDescriptions]
   );
 
-  const clearAll = useCallback(() => {
-    setCandidates([]);
-    setJobDescriptions([]);
-    localStorage.removeItem(CANDIDATES_KEY);
-    localStorage.removeItem(JDS_KEY);
-  }, []);
-
   const value = {
     candidates,
     jobDescriptions,
@@ -96,9 +86,10 @@ export function AppDataProvider({ children }) {
     refresh,
     addCandidate,
     addJobDescription,
+    removeCandidate,
+    removeJobDescription,
     getCandidateById,
     getJobDescriptionById,
-    clearAll,
   };
 
   return <AppDataContext.Provider value={value}>{children}</AppDataContext.Provider>;

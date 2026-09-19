@@ -1,24 +1,14 @@
 import api from "./api";
 
-/**
- * Lists every candidate stored in the backend, each with their latest ATS
- * report nested — the list endpoint that was missing before. This is now
- * the source of truth on load, instead of relying purely on localStorage.
- */
+/** Lists the signed-in user's candidates, each with their latest ATS report. */
 export async function listCandidates() {
   const { data } = await api.get("/api/candidates");
   return data;
 }
 
-/**
- * Uploads a resume file (PDF/DOCX) and returns { candidate, ats_report }.
- * This is the only endpoint that creates a Candidate — there is no
- * list-all-candidates endpoint on the backend yet (see README "Known Gaps").
- */
 export async function uploadResume(file, onUploadProgress) {
   const formData = new FormData();
   formData.append("file", file);
-
   const { data } = await api.post("/api/upload-resume", formData, {
     headers: { "Content-Type": "multipart/form-data" },
     onUploadProgress,
@@ -38,5 +28,15 @@ export async function getAtsReport(candidateId) {
 
 export async function getMatchScore(candidateId, jdId) {
   const { data } = await api.get(`/api/candidates/${candidateId}/match/${jdId}`);
+  return data;
+}
+
+export async function deleteCandidate(candidateId) {
+  await api.delete(`/api/candidates/${candidateId}`);
+}
+
+/** Detected professional field(s) for a candidate, by weighted skill relevance. */
+export async function getDetectedField(candidateId) {
+  const { data } = await api.get(`/api/candidates/${candidateId}/detected-field`);
   return data;
 }

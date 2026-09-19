@@ -15,12 +15,12 @@ export async function getJobDescription(jdId) {
   return data;
 }
 
-/**
- * Ranks every candidate currently stored in the backend against this JD.
- * No request body — jd_id in the URL is the only input, per the backend
- * route signature (rank_all_candidates(jd_id: int, ...)).
- */
+/** Ranks the signed-in user's candidates against this JD. No request body. */
 export async function rankCandidates(jdId) {
   const { data } = await api.post(`/api/job-descriptions/${jdId}/rank`);
   return data;
+}
+
+export async function deleteJobDescription(jdId) {
+  await api.delete(`/api/job-descriptions/${jdId}`);
 }

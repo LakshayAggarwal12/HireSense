@@ -23,11 +23,9 @@ export default function CandidateDetailPage() {
   const [fetchFailed, setFetchFailed] = useState(false);
   const [fetching, setFetching] = useState(false);
 
-  // Not in the already-loaded list (e.g. a direct link opened on another
-  // device/browser) — fetch it straight from the backend by id instead of
-  // giving up. This is what actually closes the cross-device gap: the
-  // candidate lives in the real database regardless of which browser
-  // uploaded it.
+  // Not in the already-loaded list (e.g. a direct link, or another device):
+  // fetch it by id. The backend scopes this to the signed-in user, so a
+  // candidate belonging to someone else correctly 404s here.
   useEffect(() => {
     if (fromList || listLoading) return;
     let cancelled = false;
@@ -68,8 +66,12 @@ export default function CandidateDetailPage() {
           <Card>
             <EmptyState
               title="Candidate not found"
-              description="This candidate doesn't exist, or may have been removed from the backend."
-              action={<Button onClick={() => navigate("/candidates")} size="sm">Back to candidates</Button>}
+              description="This candidate doesn't exist, or doesn't belong to your account."
+              action={
+                <Button onClick={() => navigate("/candidates")} size="sm">
+                  Back to candidates
+                </Button>
+              }
             />
           </Card>
         </div>
@@ -100,28 +102,57 @@ export default function CandidateDetailPage() {
       <div className="p-6 max-w-5xl grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <Card>
-            <h3 className="font-display font-semibold text-sm mb-4">ATS parseability</h3>
+            <h3 className="font-display font-semibold text-sm mb-4">ATS analysis</h3>
             {atsReport ? (
               <>
-                <div className="flex items-center gap-6 mb-2">
+                <div className="flex items-center gap-6 mb-6">
                   <ScoreRing score={atsReport.overall_score} size="lg" />
                   <p className="text-sm text-ink-soft leading-relaxed">
-                    This score reflects how reliably an automated tracking system could read
-                    this resume — formatting and structure only, independent of any specific job.
+                    Two things are scored separately:{" "}
+                    <span className="text-ink font-medium">Parseability</span> (can an ATS read
+                    this file at all) and{" "}
+                    <span className="text-ink font-medium">Content Quality</span> (is the writing
+                    itself strong). A resume can score well on one and poorly on the other.
                   </p>
                 </div>
-                <AtsChecklist checks={atsReport.checks} />
+                <AtsChecklist
+                  checks={atsReport.checks}
+                  categoryScores={atsReport.category_scores || {}}
+                />
               </>
             ) : (
               <p className="text-sm text-ink-soft">No ATS report available for this candidate.</p>
             )}
           </Card>
 
+          {atsReport?.suggestions?.length > 0 && (
+            <Card>
+              <h3 className="font-display font-semibold text-sm mb-1">Priority improvements</h3>
+              <p className="text-xs text-ink-soft mb-4">
+                Ordered by how many points each issue is currently costing.
+              </p>
+              <ol className="space-y-3">
+                {atsReport.suggestions.map((s, i) => (
+                  <li key={i} className="flex gap-3">
+                    <span className="h-5 w-5 rounded-full bg-accent-soft text-accent-ink text-[11px] font-semibold flex items-center justify-center shrink-0 mt-0.5">
+                      {i + 1}
+                    </span>
+                    <p className="text-xs text-ink-soft leading-relaxed">{s}</p>
+                  </li>
+                ))}
+              </ol>
+            </Card>
+          )}
+
           <Card>
             <h3 className="font-display font-semibold text-sm mb-3">Skills detected</h3>
             <div className="flex flex-wrap gap-1.5">
               {(candidate.extracted_skills || []).length > 0 ? (
-                candidate.extracted_skills.map((s) => <Badge key={s} tone="accent">{s}</Badge>)
+                candidate.extracted_skills.map((s) => (
+                  <Badge key={s} tone="accent">
+                    {s}
+                  </Badge>
+                ))
               ) : (
                 <p className="text-sm text-ink-soft">No skills detected in this resume.</p>
               )}
@@ -165,7 +196,9 @@ export default function CandidateDetailPage() {
                   <LuBriefcase className="h-3.5 w-3.5" /> Experience
                 </p>
                 <p className="text-sm text-ink">
-                  {candidate.experience_years ? `${candidate.experience_years}+ years` : "Not detected"}
+                  {candidate.experience_years
+                    ? `${candidate.experience_years}+ years`
+                    : "Not detected"}
                 </p>
               </div>
             </div>

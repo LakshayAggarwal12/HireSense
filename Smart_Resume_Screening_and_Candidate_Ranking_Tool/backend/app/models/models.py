@@ -1,20 +1,17 @@
 """
 ORM models.
 
-Design notes:
-- Candidate stores parsed resume data ONCE; it's reused across multiple JD
-  matches, so we don't re-parse the same PDF every time it's ranked.
-- JobDescription is stored so past JDs can be revisited/re-run later.
-- MatchScore is the join table between a Candidate and a JobDescription —
-  this is what lets one candidate be ranked against many JDs without
-  duplicating parsed resume data.
-- ATSReport is JD-independent (parseability only), so it's tied to the
-  Candidate directly, not to a MatchScore.
+Ownership model: Candidate and JobDescription each carry a user_id, so every
+query can be scoped to the authenticated user. Downstream rows (ATSReport,
+MatchScore) inherit ownership through their parent — they are never queried
+without going through a candidate/JD the user already owns, so they don't
+need their own user_id column.
 """
 from datetime import datetime, timezone
 
 from sqlalchemy import (
     JSON,
+    Boolean,
     DateTime,
     Float,
     ForeignKey,
@@ -31,10 +28,34 @@ def utcnow() -> datetime:
     return datetime.now(timezone.utc)
 
 
+class User(Base):
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False, index=True)
+    full_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    # bcrypt hash — the plaintext password is never stored or logged anywhere.
+    hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+
+    candidates: Mapped[list["Candidate"]] = relationship(
+        back_populates="owner", cascade="all, delete-orphan"
+    )
+    job_descriptions: Mapped[list["JobDescription"]] = relationship(
+        back_populates="owner", cascade="all, delete-orphan"
+    )
+
+
 class Candidate(Base):
     __tablename__ = "candidates"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    # Nullable so rows created before auth existed aren't orphaned by the
+    # schema change; new rows always get an owner (enforced in the routes).
+    user_id: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id"), nullable=True, index=True
+    )
     filename: Mapped[str] = mapped_column(String(255), nullable=False)
     full_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
     email: Mapped[str | None] = mapped_column(String(255), nullable=True)
@@ -47,6 +68,7 @@ class Candidate(Base):
 
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
+    owner: Mapped["User | None"] = relationship(back_populates="candidates")
     match_scores: Mapped[list["MatchScore"]] = relationship(
         back_populates="candidate", cascade="all, delete-orphan"
     )
@@ -59,11 +81,15 @@ class JobDescription(Base):
     __tablename__ = "job_descriptions"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    user_id: Mapped[int | None] = mapped_column(
+        ForeignKey("users.id"), nullable=True, index=True
+    )
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     raw_text: Mapped[str] = mapped_column(Text, nullable=False)
     required_skills: Mapped[list] = mapped_column(JSON, default=list)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
 
+    owner: Mapped["User | None"] = relationship(back_populates="job_descriptions")
     match_scores: Mapped[list["MatchScore"]] = relationship(
         back_populates="job_description", cascade="all, delete-orphan"
     )
@@ -96,7 +122,9 @@ class ATSReport(Base):
     candidate_id: Mapped[int] = mapped_column(ForeignKey("candidates.id"))
 
     overall_score: Mapped[float] = mapped_column(Float)  # 0-100
-    checks: Mapped[list] = mapped_column(JSON, default=list)  # list of {name, passed, message, weight}
+    # Per-category subscores, e.g. {"Parseability": 92.1, "Content Quality": 61.0}
+    category_scores: Mapped[dict] = mapped_column(JSON, default=dict)
+    checks: Mapped[list] = mapped_column(JSON, default=list)
     suggestions: Mapped[list] = mapped_column(JSON, default=list)
 
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
@@ -105,14 +133,8 @@ class ATSReport(Base):
 
 
 # ---------------------------------------------------------------------------
-# Skills taxonomy — this used to be a static JSON file (app/data/
-# skills_taxonomy.json) loaded into memory. It's now a real dataset living
-# in the database: a skill belongs to a category, can have alias spellings
-# ("React.js"/"ReactJS"/"React"), and can be associated with one or more
-# job fields with a relevance weight. This is what powers both skill
-# extraction (skill_extractor.py builds its matcher from this table) and
-# field detection (guessing whether a JD/resume is "Backend Development"
-# vs "Data Science" etc. from weighted skill overlap).
+# Skills taxonomy dataset (shared across all users — reference data, not
+# user-owned content, so these tables intentionally have no user_id).
 # ---------------------------------------------------------------------------
 
 class SkillCategory(Base):
@@ -129,8 +151,6 @@ class Skill(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     canonical_name: Mapped[str] = mapped_column(String(100), unique=True, nullable=False, index=True)
-    # Alternate spellings that should all resolve to canonical_name during
-    # extraction, e.g. ["ReactJS", "React.js"] for the skill "React".
     aliases: Mapped[list] = mapped_column(JSON, default=list)
     category_id: Mapped[int | None] = mapped_column(ForeignKey("skill_categories.id"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
@@ -154,11 +174,6 @@ class JobField(Base):
 
 
 class SkillFieldRelevance(Base):
-    """
-    Many-to-many between Skill and JobField, weighted by how core that
-    skill is to that field (0-1). E.g. "Python" might be 0.6 relevant to
-    Backend Development and 0.9 relevant to Data Science.
-    """
     __tablename__ = "skill_field_relevance"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
