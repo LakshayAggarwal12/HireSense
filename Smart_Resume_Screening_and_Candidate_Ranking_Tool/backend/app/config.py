@@ -12,19 +12,16 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    database_url: str = "sqlite:///./resume_screener.db"
-    allowed_origins: str = "http://localhost:5173,http://localhost:3000"
-    max_upload_size_mb: int = 5
-    allowed_extensions: str = ".pdf,.docx"
-    app_env: str = "development"
+    database_url: str
+    allowed_origins: str
+    max_upload_size_mb: int
+    allowed_extensions: str
+    app_env: str
 
     # ---- Auth settings ----
-    # MUST be overridden in production via the JWT_SECRET_KEY env var. The
-    # default below exists only so local development runs without setup —
-    # main.py refuses to start with this value when app_env == "production".
-    jwt_secret_key: str = "dev-only-insecure-change-me"
-    jwt_algorithm: str = "HS256"
-    access_token_expire_minutes: int = 60 * 24 * 7  # 7 days
+    jwt_secret_key: str
+    jwt_algorithm: str
+    access_token_expire_minutes: int
 
     @property
     def origins_list(self) -> list[str]:

@@ -10,7 +10,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
-from app.database import Base, SessionLocal, engine
+from app.database import Base, SessionLocal, engine, upgrade_ownership_columns
 from app.models.models import Skill
 from app.routes import auth, rank, skills, upload
 
@@ -27,6 +27,7 @@ if settings.is_production and settings.jwt_secret_key == "dev-only-insecure-chan
     )
 
 Base.metadata.create_all(bind=engine)
+upgrade_ownership_columns()
 
 
 def _auto_seed_skills_if_empty():
