@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { LuUsers } from "react-icons/lu";
+import { LuUsers, LuUpload } from "react-icons/lu";
 import Topbar, { SearchInput } from "../components/layout/Topbar";
 import Card from "../components/ui/Card";
 import EmptyState from "../components/ui/EmptyState";
@@ -74,9 +74,19 @@ export default function CandidatesPage() {
         }
       />
 
-      <div className="p-6 space-y-6 max-w-6xl">
+      <div className="page-shell space-y-6 max-w-6xl">
         <Card>
-          <h3 className="font-display font-semibold text-sm mb-4">Upload resumes</h3>
+          <div className="flex items-start gap-3 mb-4">
+            <span className="h-8 w-8 rounded-lg bg-accent-soft border border-accent/10 flex items-center justify-center shrink-0">
+              <LuUpload className="h-4 w-4 text-accent" aria-hidden="true" />
+            </span>
+            <div>
+              <h3 className="font-display font-semibold text-sm text-ink">Upload resumes</h3>
+              <p className="text-xs text-ink-soft mt-0.5">
+                Each file is parsed, its skills extracted, and an ATS report generated immediately.
+              </p>
+            </div>
+          </div>
           <UploadDropzone onUploaded={(result) => addCandidate(result.candidate, result.ats_report)} />
         </Card>
 
@@ -103,7 +113,7 @@ export default function CandidatesPage() {
           </Card>
         ) : (
           <>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="text-xs text-ink-soft">
                 Showing {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, sorted.length)} of {sorted.length}
               </p>

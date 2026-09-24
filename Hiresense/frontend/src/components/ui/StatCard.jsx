@@ -26,17 +26,21 @@ export default function StatCard({ icon: Icon, label, value, hint }) {
   const animated = useCountUp(isNumeric ? value : 0);
 
   return (
-    <div className="bg-surface border border-border rounded-xl p-5 hover-lift">
-      <div className="flex items-center justify-between mb-3">
-        <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-accent-soft to-accent-soft flex items-center justify-center">
-          <Icon className="h-4 w-4 text-accent" />
+    <div className="bg-surface border border-border rounded-xl shadow-card p-5 hover-lift">
+      <div className="flex items-start gap-3.5">
+        {Icon && (
+          <div className="h-9 w-9 rounded-lg bg-accent-soft border border-accent/10 flex items-center justify-center shrink-0">
+            <Icon className="h-4 w-4 text-accent" aria-hidden="true" />
+          </div>
+        )}
+        <div className="min-w-0">
+          <p className="text-xs font-medium text-ink-soft">{label}</p>
+          <p className="text-2xl font-display font-bold font-tabular text-ink leading-tight mt-1">
+            {isNumeric ? animated : value}
+          </p>
+          {hint && <p className="text-[11px] text-ink-soft/80 mt-1.5">{hint}</p>}
         </div>
       </div>
-      <p className="text-2xl font-display font-bold font-tabular text-ink">
-        {isNumeric ? animated : value}
-      </p>
-      <p className="text-xs text-ink-soft mt-1">{label}</p>
-      {hint && <p className="text-[11px] text-ink-soft/70 mt-2">{hint}</p>}
     </div>
   );
 }

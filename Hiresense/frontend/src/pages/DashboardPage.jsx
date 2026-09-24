@@ -31,17 +31,17 @@ export default function DashboardPage() {
         subtitle="Your screening activity"
         actions={
           <>
-            <Link to="/candidates">
-              <Button variant="secondary" size="sm" icon={LuUpload}>Upload resume</Button>
-            </Link>
-            <Link to="/jobs">
-              <Button size="sm" icon={LuPlus}>New job</Button>
-            </Link>
+            <Button to="/candidates" variant="secondary" size="sm" icon={LuUpload}>
+              Upload resume
+            </Button>
+            <Button to="/jobs" size="sm" icon={LuPlus}>
+              New job
+            </Button>
           </>
         }
       />
 
-      <div className="p-6 space-y-6 max-w-6xl">
+      <div className="page-shell space-y-6 max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -85,9 +85,9 @@ export default function DashboardPage() {
                 title="No candidates yet"
                 description="Upload a resume to see it parsed, scored, and ready for ranking against a job description."
                 action={
-                  <Link to="/candidates">
-                    <Button size="sm" icon={LuUpload}>Upload a resume</Button>
-                  </Link>
+                  <Button to="/candidates" size="sm" icon={LuUpload}>
+                    Upload a resume
+                  </Button>
                 }
               />
             </Card>
@@ -104,17 +104,19 @@ export default function DashboardPage() {
 
         {jobDescriptions.length === 0 && candidates.length > 0 && (
           <Card className="border-accent/30 bg-accent-soft/40">
-            <div className="flex items-center gap-3">
-              <LuTrendingUp className="h-5 w-5 text-accent shrink-0" />
-              <div className="flex-1">
-                <p className="text-sm font-medium text-ink">Ready to rank candidates</p>
-                <p className="text-xs text-ink-soft mt-0.5">
-                  Add a job description to see how your uploaded candidates match up.
-                </p>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="flex items-start gap-3 flex-1">
+                <LuTrendingUp className="h-5 w-5 text-accent shrink-0 mt-0.5" aria-hidden="true" />
+                <div>
+                  <p className="text-sm font-medium text-ink">Ready to rank candidates</p>
+                  <p className="text-xs text-ink-soft mt-0.5">
+                    Add a job description to see how your uploaded candidates match up.
+                  </p>
+                </div>
               </div>
-              <Link to="/jobs">
-                <Button size="sm">Add job description</Button>
-              </Link>
+              <Button to="/jobs" size="sm" className="w-full sm:w-auto shrink-0">
+                Add job description
+              </Button>
             </div>
           </Card>
         )}

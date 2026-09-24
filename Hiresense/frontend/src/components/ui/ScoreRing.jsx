@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { getScoreBand, SCORE_COLORS, formatScore } from "../../utils/scoring";
+import { getScoreBand, formatScore } from "../../utils/scoring";
 
 const SIZES = {
   sm: { box: 44, stroke: 4, font: "text-xs" },

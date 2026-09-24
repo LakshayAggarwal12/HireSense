@@ -1,6 +1,7 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Sidebar from "../components/layout/Sidebar";
+import SkipLink from "../components/ui/SkipLink";
 import { SidebarUIProvider } from "../context/SidebarUIContext";
 
 export default function DashboardLayout() {
@@ -9,8 +10,9 @@ export default function DashboardLayout() {
   return (
     <SidebarUIProvider>
       <div className="flex min-h-screen bg-canvas">
+        <SkipLink />
         <Sidebar />
-        <main className="flex-1 min-w-0">
+        <main id="main" tabIndex={-1} className="flex-1 min-w-0 outline-none">
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}

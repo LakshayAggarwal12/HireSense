@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { ProtectedRoute, PublicOnlyRoute } from "../components/auth/RouteGuards";
+import LandingPage from "../pages/LandingPage";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import DashboardPage from "../pages/DashboardPage";
@@ -11,6 +12,12 @@ import JobDetailPage from "../pages/JobDetailPage";
 import SettingsPage from "../pages/SettingsPage";
 
 const router = createBrowserRouter([
+  {
+    // Public product overview. Signed-in visitors are redirected to
+    // /dashboard by the page itself, so "/" keeps working for them.
+    path: "/",
+    element: <LandingPage />,
+  },
   {
     // Auth pages — redirect away if already signed in.
     element: <PublicOnlyRoute />,
@@ -24,10 +31,9 @@ const router = createBrowserRouter([
     element: <ProtectedRoute />,
     children: [
       {
-        path: "/",
         element: <DashboardLayout />,
         children: [
-          { index: true, element: <DashboardPage /> },
+          { path: "/dashboard", element: <DashboardPage /> },
           { path: "candidates", element: <CandidatesPage /> },
           { path: "candidates/:id", element: <CandidateDetailPage /> },
           { path: "jobs", element: <JobsPage /> },

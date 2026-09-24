@@ -4,10 +4,36 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="HireSense parses resumes, scores ATS parseability across seven weighted checks, and ranks candidates against a job description with every score explained."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f6f7f9" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0b0d" media="(prefers-color-scheme: dark)" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet" />
     <title>HireSense - AI Resume Screening</title>
+    <script>
+      // Apply the saved theme before first paint. PreferencesProvider reads the
+      // same keys and re-applies them on mount; doing it early here only
+      // removes the flash of light theme that a dark-mode user would otherwise
+      // see while the React bundle loads.
+      (function () {
+        try {
+          var theme = localStorage.getItem("HireSense_theme") || "system";
+          var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var isDark = theme === "dark" || (theme === "system" && prefersDark);
+          document.documentElement.classList.toggle("dark", isDark);
+          if (localStorage.getItem("HireSense_reduced_motion") === "true") {
+            document.documentElement.classList.add("reduce-motion");
+          }
+        } catch (e) {
+          /* localStorage unavailable — fall through to the CSS defaults */
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

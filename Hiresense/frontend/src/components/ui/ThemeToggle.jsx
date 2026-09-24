@@ -8,7 +8,7 @@ const OPTIONS = [
   { value: "system", icon: LuMonitor, label: "System" },
 ];
 
-export default function ThemeToggle({ compact = false }) {
+export default function ThemeToggle({ compact = false, layoutId = "theme-toggle-pill" }) {
   const { theme, setTheme } = usePreferences();
 
   return (
@@ -28,7 +28,7 @@ export default function ThemeToggle({ compact = false }) {
           >
             {active && (
               <motion.div
-                layoutId="theme-toggle-pill"
+                layoutId={layoutId}
                 className="absolute inset-0 bg-accent-soft rounded-md -z-10"
                 transition={{ type: "spring", stiffness: 500, damping: 35 }}
               />

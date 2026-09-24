@@ -15,19 +15,23 @@ export default function RankingTable({ rankings, selectedIds = [], onToggleSelec
   const selectable = typeof onToggleSelect === "function";
 
   return (
-    <div className="bg-surface border border-border rounded-xl overflow-hidden">
-      <div
-        className="grid gap-3 px-5 py-3 border-b border-border bg-canvas/50 text-[11px] font-semibold text-ink-soft uppercase tracking-wide"
-        style={{ gridTemplateColumns: GRID_COLS }}
-      >
-        <span></span>
-        <span>Rank</span>
-        <span>Candidate</span>
-        <span className="text-center">Semantic</span>
-        <span className="text-center">Skill match</span>
-        <span className="text-center">Composite</span>
-        <span></span>
-      </div>
+    <div className="bg-surface border border-border rounded-xl shadow-card overflow-hidden">
+      {/* The seven score columns need a minimum width to stay legible, so on
+          narrow screens the table pans horizontally (one shared scroll
+          context) instead of crushing the candidate column. */}
+      <div className="overflow-x-auto">
+        <div
+          className="min-w-[44rem] grid gap-3 px-5 py-3 border-b border-border bg-canvas/50 text-[11px] font-semibold text-ink-soft uppercase tracking-wide"
+          style={{ gridTemplateColumns: GRID_COLS }}
+        >
+          <span></span>
+          <span>Rank</span>
+          <span>Candidate</span>
+          <span className="text-center">Semantic</span>
+          <span className="text-center">Skill match</span>
+          <span className="text-center">Composite</span>
+          <span></span>
+        </div>
 
       {rankings.map((r, idx) => {
         const isExpanded = expandedId === r.candidate_id;
@@ -41,7 +45,7 @@ export default function RankingTable({ rankings, selectedIds = [], onToggleSelec
             className={`border-b border-border-soft last:border-b-0 ${isSelected ? "bg-accent-soft/30" : ""}`}
           >
             <div
-              className="w-full grid gap-3 px-5 py-3.5 items-center hover:bg-canvas/40 transition-colors"
+              className="w-full min-w-[44rem] grid gap-3 px-5 py-3.5 items-center hover:bg-canvas/40 transition-colors"
               style={{ gridTemplateColumns: GRID_COLS }}
             >
               {selectable ? (
@@ -166,6 +170,7 @@ export default function RankingTable({ rankings, selectedIds = [], onToggleSelec
           </motion.div>
         );
       })}
+      </div>
     </div>
   );
 }

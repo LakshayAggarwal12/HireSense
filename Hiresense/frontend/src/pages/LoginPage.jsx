@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import AuthLayout from "../components/auth/AuthLayout";
@@ -14,6 +14,15 @@ export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const [attempted, setAttempted] = useState(false);
+  const formRef = useRef(null);
+
+  // Keyboard users shouldn't have to hunt for the field that failed —
+  // move focus to the first invalid input after a rejected submit.
+  useEffect(() => {
+    if (!attempted) return;
+    formRef.current?.querySelector('[aria-invalid="true"]')?.focus();
+  }, [attempted, errors]);
 
   const setField = (key) => (e) => {
     setForm((f) => ({ ...f, [key]: e.target.value }));
@@ -31,6 +40,7 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setAttempted(true);
     if (!validate()) return;
 
     setSubmitting(true);
@@ -38,7 +48,7 @@ export default function LoginPage() {
       await login({ email: form.email.trim(), password: form.password });
       toast.success("Welcome back");
       // Send them back to wherever the route guard intercepted them.
-      navigate(location.state?.from || "/", { replace: true });
+      navigate(location.state?.from || "/dashboard", { replace: true });
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -46,20 +56,26 @@ export default function LoginPage() {
     }
   };
 
+  const errorCount = Object.values(errors).filter(Boolean).length;
+
   return (
     <AuthLayout
-      title="Sign in"
-      subtitle="Access your candidate pipeline and screening results."
+      title="Welcome back"
+      subtitle="Sign in to your candidate pipeline and screening results."
       footer={
         <>
-          Don&apos;t have an account?{" "}
-          <Link to="/register" className="text-accent font-medium hover:underline">
-            Create one
+          New to HireSense?{" "}
+          <Link to="/register" className="text-accent font-semibold hover:underline underline-offset-2">
+            Create an account
           </Link>
         </>
       }
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form ref={formRef} onSubmit={handleSubmit} noValidate className="space-y-4">
+        <p aria-live="polite" className="sr-only">
+          {errorCount > 0 ? `${errorCount} field${errorCount > 1 ? "s" : ""} need attention.` : ""}
+        </p>
+
         <AuthField
           label="Email"
           type="email"
@@ -68,6 +84,7 @@ export default function LoginPage() {
           placeholder="you@company.com"
           error={errors.email}
           autoComplete="email"
+          required
         />
         <AuthField
           label="Password"
@@ -77,10 +94,14 @@ export default function LoginPage() {
           placeholder="Enter your password"
           error={errors.password}
           autoComplete="current-password"
+          required
         />
-        <Button type="submit" loading={submitting} className="w-full" size="lg">
-          Sign in
-        </Button>
+
+        <div className="pt-1">
+          <Button type="submit" loading={submitting} className="w-full" size="lg">
+            {submitting ? "Signing in…" : "Sign in"}
+          </Button>
+        </div>
       </form>
     </AuthLayout>
   );

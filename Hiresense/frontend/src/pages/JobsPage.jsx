@@ -20,7 +20,7 @@ export default function JobsPage() {
         subtitle={loading ? "Loading..." : `${jobDescriptions.length} total`}
       />
 
-      <div className="p-6 max-w-6xl grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="page-shell max-w-6xl grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1">
           <JobDescriptionForm
             onCreated={(jd) => {

@@ -51,7 +51,7 @@ export default function CandidateDetailPage() {
     return (
       <>
         <Topbar title="Loading..." />
-        <div className="p-6 max-w-5xl">
+        <div className="page-shell max-w-5xl">
           <SkeletonCard />
         </div>
       </>
@@ -62,7 +62,7 @@ export default function CandidateDetailPage() {
     return (
       <>
         <Topbar title="Candidate not found" />
-        <div className="p-6 max-w-4xl">
+        <div className="page-shell max-w-4xl">
           <Card>
             <EmptyState
               title="Candidate not found"
@@ -99,13 +99,13 @@ export default function CandidateDetailPage() {
         }
       />
 
-      <div className="p-6 max-w-5xl grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="page-shell max-w-5xl grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <Card>
             <h3 className="font-display font-semibold text-sm mb-4">ATS analysis</h3>
             {atsReport ? (
               <>
-                <div className="flex items-center gap-6 mb-6">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-6 mb-6">
                   <ScoreRing score={atsReport.overall_score} size="lg" />
                   <p className="text-sm text-ink-soft leading-relaxed">
                     Two things are scored separately:{" "}

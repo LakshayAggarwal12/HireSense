@@ -2,7 +2,6 @@ import { useState, useRef, useCallback } from "react";
 import { LuUpload, LuFileText, LuX } from "react-icons/lu";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
-import Button from "../ui/Button";
 import { uploadResume } from "../../services/candidateService";
 
 const ALLOWED_TYPES = [".pdf", ".docx"];
@@ -72,7 +71,19 @@ export default function UploadDropzone({ onUploaded }) {
 
   return (
     <div className="space-y-4">
-      <div
+      <input
+        ref={inputRef}
+        type="file"
+        accept=".pdf,.docx"
+        multiple
+        className="hidden"
+        onChange={(e) => e.target.files?.length && handleFiles(e.target.files)}
+      />
+
+      {/* A real button, not a clickable div: the dropzone is reachable and
+          operable from the keyboard (Enter/Space) as well as by mouse. */}
+      <button
+        type="button"
         onDragOver={(e) => {
           e.preventDefault();
           setIsDragging(true);
@@ -80,24 +91,18 @@ export default function UploadDropzone({ onUploaded }) {
         onDragLeave={() => setIsDragging(false)}
         onDrop={onDrop}
         onClick={() => inputRef.current?.click()}
-        className={`relative rounded-xl border-2 border-dashed cursor-pointer
+        className={`relative w-full rounded-xl border-2 border-dashed cursor-pointer
           transition-colors duration-150 px-6 py-12 flex flex-col items-center text-center
-          ${isDragging ? "border-accent bg-accent-soft" : "border-border bg-surface hover:border-accent/50"}`}
+          ${isDragging ? "border-accent bg-accent-soft" : "border-border bg-surface hover:border-accent/50 hover:bg-canvas/60"}`}
       >
-        <input
-          ref={inputRef}
-          type="file"
-          accept=".pdf,.docx"
-          multiple
-          className="hidden"
-          onChange={(e) => e.target.files?.length && handleFiles(e.target.files)}
-        />
-        <div className="h-11 w-11 rounded-full bg-accent-soft flex items-center justify-center mb-3">
-          <LuUpload className="h-5 w-5 text-accent" />
-        </div>
-        <p className="text-sm font-medium text-ink">Drop resumes here, or click to browse</p>
-        <p className="text-xs text-ink-soft mt-1">PDF or DOCX, up to {MAX_SIZE_MB}MB each</p>
-      </div>
+        <span className="h-11 w-11 rounded-full bg-accent-soft border border-accent/10 flex items-center justify-center mb-3">
+          <LuUpload className="h-5 w-5 text-accent" aria-hidden="true" />
+        </span>
+        <span className="text-sm font-medium text-ink">Drop resumes here, or click to browse</span>
+        <span className="text-xs text-ink-soft mt-1">
+          PDF or DOCX, up to {MAX_SIZE_MB}MB each
+        </span>
+      </button>
 
       <AnimatePresence initial={false}>
         {queue.length > 0 && (

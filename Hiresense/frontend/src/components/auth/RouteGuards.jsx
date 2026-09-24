@@ -1,13 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-
-function FullPageLoader() {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-canvas">
-      <div className="h-8 w-8 rounded-full border-2 border-accent border-t-transparent animate-spin" />
-    </div>
-  );
-}
+import FullPageLoader from "../ui/FullPageLoader";
 
 /**
  * Wraps every authenticated route. Waits for the initial token check to
@@ -18,7 +11,7 @@ export function ProtectedRoute() {
   const { isAuthenticated, initializing } = useAuth();
   const location = useLocation();
 
-  if (initializing) return <FullPageLoader />;
+  if (initializing) return <FullPageLoader label="Checking your session" />;
 
   if (!isAuthenticated) {
     // Remember where they were headed so login can send them back there.
@@ -34,7 +27,7 @@ export function ProtectedRoute() {
 export function PublicOnlyRoute() {
   const { isAuthenticated, initializing } = useAuth();
 
-  if (initializing) return <FullPageLoader />;
-  if (isAuthenticated) return <Navigate to="/" replace />;
+  if (initializing) return <FullPageLoader label="Checking your session" />;
+  if (isAuthenticated) return <Navigate to="/dashboard" replace />;
   return <Outlet />;
 }

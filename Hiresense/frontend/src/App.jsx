@@ -15,13 +15,26 @@ export default function App() {
           <RouterProvider router={router} />
           <Toaster
             position="top-right"
+            gutter={10}
+            containerStyle={{ top: 72 }}
             toastOptions={{
+              duration: 4000,
               style: {
                 fontSize: "13px",
-                borderRadius: "8px",
+                lineHeight: "1.45",
+                borderRadius: "10px",
+                padding: "10px 14px",
+                maxWidth: "22rem",
                 border: "1px solid var(--color-border)",
                 background: "var(--color-surface)",
                 color: "var(--color-ink)",
+                boxShadow: "var(--shadow-pop)",
+              },
+              success: {
+                iconTheme: { primary: "var(--color-accent)", secondary: "var(--color-surface)" },
+              },
+              error: {
+                iconTheme: { primary: "var(--color-score-low)", secondary: "var(--color-surface)" },
               },
             }}
           />

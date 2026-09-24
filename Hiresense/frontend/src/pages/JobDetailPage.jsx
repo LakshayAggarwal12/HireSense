@@ -61,7 +61,7 @@ export default function JobDetailPage() {
     return (
       <>
         <Topbar title="Loading..." />
-        <div className="p-6 max-w-5xl">
+        <div className="page-shell max-w-5xl">
           <SkeletonCard />
         </div>
       </>
@@ -72,7 +72,7 @@ export default function JobDetailPage() {
     return (
       <>
         <Topbar title="Job not found" />
-        <div className="p-6 max-w-4xl">
+        <div className="page-shell max-w-4xl">
           <Card>
             <EmptyState
               title="Job description not found"
@@ -124,7 +124,7 @@ export default function JobDetailPage() {
         }
       />
 
-      <div className="p-6 max-w-5xl space-y-6">
+      <div className="page-shell max-w-5xl space-y-6">
         <Card>
           <h3 className="font-display font-semibold text-sm mb-2">Description</h3>
           <p className="text-sm text-ink-soft leading-relaxed whitespace-pre-line">{jd.raw_text}</p>
@@ -143,7 +143,7 @@ export default function JobDetailPage() {
         </Card>
 
         <div className="space-y-3">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <h3 className="font-display font-semibold text-sm">Candidate ranking</h3>
               {rankings && (

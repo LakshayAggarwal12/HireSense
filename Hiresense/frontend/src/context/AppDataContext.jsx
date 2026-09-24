@@ -69,6 +69,16 @@ export function AppDataProvider({ children }) {
     setJobDescriptions((prev) => prev.filter((j) => j.id !== id));
   }, []);
 
+  /**
+   * "Clear session data" in Settings: drops the locally cached view only.
+   * The records stay in the database, so the next refresh restores them —
+   * which is exactly what the copy on that button promises.
+   */
+  const clearAll = useCallback(() => {
+    setCandidates([]);
+    setJobDescriptions([]);
+  }, []);
+
   const getCandidateById = useCallback(
     (id) => candidates.find((c) => c.id === id),
     [candidates]
@@ -88,6 +98,7 @@ export function AppDataProvider({ children }) {
     addJobDescription,
     removeCandidate,
     removeJobDescription,
+    clearAll,
     getCandidateById,
     getJobDescriptionById,
   };
