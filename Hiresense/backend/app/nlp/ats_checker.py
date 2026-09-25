@@ -7,9 +7,9 @@ v1 had 7 binary pass/fail checks in one flat list, all about machine
 readability. v2 keeps that philosophy (rule-based and fully explainable, not
 a black-box model) but improves it in three concrete ways:
 
-1. TWO CATEGORIES. "Parseability" (can an ATS read this file at all — 60
+1. TWO CATEGORIES. "Parseability" (can an ATS read this file at all - 60
    points) is now separated from "Content Quality" (is the writing actually
-   strong — 40 points). These are genuinely different problems: a perfectly
+   strong - 40 points). These are genuinely different problems: a perfectly
    machine-readable resume can still be weakly written, and previously a
    single number hid that distinction.
 
@@ -20,7 +20,7 @@ a black-box model) but improves it in three concrete ways:
 3. SIX NEW CONTENT CHECKS: quantified achievements, action verbs,
    professional links, skill coverage, bullet usage, and date consistency.
 
-Everything stays rule-based — every point lost still traces to a named check
+Everything stays rule-based - every point lost still traces to a named check
 with an explicit weight and a human-readable fix.
 """
 import re
@@ -37,7 +37,7 @@ SECTION_HEADERS = [
     "publications", "awards",
 ]
 
-# Common strong resume action verbs. Not exhaustive by design — this measures
+# Common strong resume action verbs. Not exhaustive by design - this measures
 # whether bullets *tend* to open with an accomplishment verb, not whether
 # every single one appears in a dictionary.
 ACTION_VERBS = {
@@ -116,7 +116,7 @@ def _check_extractable_text(doc: ParsedDocument) -> ATSCheckResult:
         message=(
             "Resume text extracts cleanly."
             if ok else
-            "Little to no text could be extracted — this resume may be a scanned image "
+            "Little to no text could be extracted - this resume may be a scanned image "
             "rather than real text. Most ATS will read this as blank. Export as a "
             "text-based PDF from your word processor instead of scanning or screenshotting."
         ),
@@ -137,7 +137,7 @@ def _check_section_headers(text: str) -> ATSCheckResult:
             f"Found {len(found)} standard section header(s): {', '.join(found[:5])}."
             if score >= 1.0 else
             f"Only {len(found)} standard section header(s) detected. ATS uses headers like "
-            "Experience, Education, Skills, and Projects to bucket your content correctly — "
+            "Experience, Education, Skills, and Projects to bucket your content correctly - "
             "use these conventional names rather than creative alternatives."
         ),
     )
@@ -180,7 +180,7 @@ def _check_contact_info(text: str) -> ATSCheckResult:
             "Email and phone number both extracted successfully."
             if score >= 1.0 else
             f"Could not reliably extract: {', '.join(missing)}. Put this as plain text near "
-            "the top of the document — not inside an image, header/footer, or table."
+            "the top of the document - not inside an image, header/footer, or table."
         ),
     )
 
@@ -196,7 +196,7 @@ def _check_images(doc: ParsedDocument) -> ATSCheckResult:
             "No embedded images detected."
             if ok else
             "Embedded images/icons detected. If contact details or section labels are shown "
-            "as icons rather than words, ATS cannot read them — use plain text labels."
+            "as icons rather than words, ATS cannot read them - use plain text labels."
         ),
     )
 
@@ -220,7 +220,7 @@ def _check_special_characters(doc: ParsedDocument) -> ATSCheckResult:
             "Low use of unusual symbols/unicode characters."
             if score >= 1.0 else
             f"High proportion of non-standard characters ({ratio:.1%}). Decorative bullets, "
-            "symbols, and icon fonts can render as garbled text in ATS systems — stick to "
+            "symbols, and icon fonts can render as garbled text in ATS systems - stick to "
             "standard bullets and plain punctuation."
         ),
     )
@@ -245,16 +245,16 @@ def _check_length(doc: ParsedDocument) -> ATSCheckResult:
     # Healthy range for an early-career resume: roughly 250-900 words.
     if 250 <= word_count <= 900:
         score = 1.0
-        msg = f"Resume length is {word_count} words — within the recommended range."
+        msg = f"Resume length is {word_count} words - within the recommended range."
     elif word_count < 250:
         score = max(0.0, word_count / 250)
         msg = (f"Resume is short ({word_count} words). Thin resumes give both ATS keyword "
-               "matching and human reviewers little to work with — expand your project and "
+               "matching and human reviewers little to work with - expand your project and "
                "experience descriptions.")
     else:
         score = max(0.0, 1.0 - ((word_count - 900) / 900))
         msg = (f"Resume is long ({word_count} words). Many reviewers and some ATS truncate "
-               "beyond 1-2 pages for early-career roles — tighten to the most relevant content.")
+               "beyond 1-2 pages for early-career roles - tighten to the most relevant content.")
 
     return ATSCheckResult(
         name="Reasonable Length", category=CATEGORY_CONTENT, score=score, weight=5, message=msg,
@@ -272,10 +272,10 @@ def _check_quantified_achievements(text: str) -> ATSCheckResult:
         score=score,
         weight=8,
         message=(
-            f"Found {count} quantified data point(s) — measurable impact is clearly stated."
+            f"Found {count} quantified data point(s) - measurable impact is clearly stated."
             if score >= 1.0 else
             f"Only {count} quantified data point(s) found. Numbers make achievements concrete "
-            "and credible — prefer \u201creduced load time by 40%\u201d or \u201cserved 50,000 "
+            "and credible - prefer \u201creduced load time by 40%\u201d or \u201cserved 50,000 "
             "daily requests\u201d over \u201cimproved performance\u201d."
         ),
     )
@@ -303,7 +303,7 @@ def _check_action_verbs(text: str) -> ATSCheckResult:
             strong += 1
 
     ratio = strong / len(bullets)
-    # 60% of bullets opening with an action verb earns full credit — demanding
+    # 60% of bullets opening with an action verb earns full credit - demanding
     # 100% would penalize legitimately varied phrasing.
     score = min(1.0, ratio / 0.6)
 
@@ -351,7 +351,7 @@ def _check_professional_links(text: str) -> ATSCheckResult:
             "Professional profile links are present and extractable."
             if score >= 1.0 else
             f"Missing or unreadable: {', '.join(missing) if missing else 'portfolio link'}. "
-            "Include full URLs as plain text (e.g. linkedin.com/in/yourname) — recruiters "
+            "Include full URLs as plain text (e.g. linkedin.com/in/yourname) - recruiters "
             "routinely check these, and hyperlinked-but-invisible text doesn't extract."
         ),
     )
@@ -367,10 +367,10 @@ def _check_skill_coverage(extracted_skills: list[str]) -> ATSCheckResult:
         score=score,
         weight=6,
         message=(
-            f"{count} recognized skills detected — good keyword coverage for ATS matching."
+            f"{count} recognized skills detected - good keyword coverage for ATS matching."
             if score >= 1.0 else
             f"Only {count} recognized skill(s) detected. ATS keyword matching depends on "
-            "explicitly naming your tools and technologies — list them plainly in a Skills "
+            "explicitly naming your tools and technologies - list them plainly in a Skills "
             "section rather than leaving them implied in prose."
         ),
     )
@@ -406,7 +406,7 @@ def _check_bullet_usage(text: str) -> ATSCheckResult:
             f"Found {bullet_count} bullet point(s)"
             + (f" and {len(long_lines)} very long paragraph(s)." if long_lines else ".")
             + " Bullet points are easier for both ATS and human reviewers to parse than "
-              "dense paragraphs — break experience descriptions into short bullets."
+              "dense paragraphs - break experience descriptions into short bullets."
         ),
     )
 
@@ -418,7 +418,7 @@ def _check_date_consistency(text: str) -> ATSCheckResult:
 
     if total_dates == 0:
         score = 0.0
-        msg = ("No recognizable date ranges found. ATS builds your work timeline from dates — "
+        msg = ("No recognizable date ranges found. ATS builds your work timeline from dates - "
                "include them in a consistent format such as \u201cJan 2024 - Present\u201d.")
     elif len(styles_used) == 1:
         score = 1.0
@@ -426,7 +426,7 @@ def _check_date_consistency(text: str) -> ATSCheckResult:
     else:
         score = 0.5
         msg = (f"Mixed date formats detected ({', '.join(styles_used)}). Inconsistent date "
-               "styles can break ATS timeline parsing — pick one format and use it throughout.")
+               "styles can break ATS timeline parsing - pick one format and use it throughout.")
 
     return ATSCheckResult(
         name="Consistent Date Formatting",
@@ -447,11 +447,11 @@ def run_ats_checks(
         (overall_score, category_scores, checks, suggestions)
 
     `extracted_skills` comes from the skill extractor and is passed in rather
-    than looked up here — this keeps ats_checker free of any database
+    than looked up here - this keeps ats_checker free of any database
     dependency, so it stays a pure function of the parsed document.
 
     `suggestions` lists the messages of every non-passing check, ordered by
-    how many points that check is currently costing — so the first suggestion
+    how many points that check is currently costing - so the first suggestion
     is always the highest-impact fix available.
     """
     skills = extracted_skills or []

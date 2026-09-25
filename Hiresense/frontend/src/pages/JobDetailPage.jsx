@@ -181,7 +181,7 @@ export default function JobDetailPage() {
                 title="Not ranked yet"
                 description={
                   candidates.length === 0
-                    ? "No candidates uploaded yet — upload at least one resume before ranking."
+                    ? "No candidates uploaded yet - upload at least one resume before ranking."
                     : `Run ranking to score all ${candidates.length} uploaded candidate(s) against this job description.`
                 }
               />

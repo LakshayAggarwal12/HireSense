@@ -26,6 +26,6 @@ python-dotenv==1.0.1
 # python -m spacy download en_core_web_sm
 
 # NOTE: sentence-transformers/torch are intentionally NOT used. Semantic
-# matching uses TF-IDF (scikit-learn) instead of transformer embeddings — a
+# matching uses TF-IDF (scikit-learn) instead of transformer embeddings - a
 # deliberate memory tradeoff for free-tier hosting (512MB limit). See the
 # docstring at the top of app/nlp/matcher.py for the full reasoning.

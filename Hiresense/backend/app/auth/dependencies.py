@@ -14,7 +14,7 @@ from app.database import get_db
 from app.models.models import User
 
 # tokenUrl points at the form-accepting login variant, because Swagger UI's
-# "Authorize" button posts OAuth2 form data — not JSON. The JSON endpoint at
+# "Authorize" button posts OAuth2 form data - not JSON. The JSON endpoint at
 # /api/auth/login is what the React frontend uses.
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login/form")
 

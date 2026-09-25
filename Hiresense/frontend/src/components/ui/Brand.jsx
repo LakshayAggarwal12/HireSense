@@ -10,7 +10,7 @@ const SIZES = {
 /**
  * The HireSense lockup (mark + wordmark). Shared by the sidebar, the auth
  * screens and the landing header so the brand renders identically everywhere
- * — the mark keeps the existing accent gradient, only its size varies.
+ * - the mark keeps the existing accent gradient, only its size varies.
  */
 export default function Brand({
   size = "sm",

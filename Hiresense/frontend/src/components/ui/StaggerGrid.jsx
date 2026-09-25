@@ -5,7 +5,7 @@ import { usePreferences } from "../../context/PreferencesContext";
  * Grid whose children fade/rise in one after another instead of all at once.
  *
  * Same reduced-motion rule as the landing page's `Reveal`: framer-motion is
- * driven in JS, so the app's `.reduce-motion` CSS class can't stop it — the
+ * driven in JS, so the app's `.reduce-motion` CSS class can't stop it - the
  * preference has to be read here and the animation skipped entirely.
  *
  * The stagger is intentionally short (60ms per child) and capped by the

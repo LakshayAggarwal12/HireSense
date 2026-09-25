@@ -21,7 +21,7 @@ export function ProtectedRoute() {
 }
 
 /**
- * For /login and /register — redirects already-authenticated users away,
+ * For /login and /register - redirects already-authenticated users away,
  * so a logged-in user visiting /login lands on the dashboard instead.
  */
 export function PublicOnlyRoute() {

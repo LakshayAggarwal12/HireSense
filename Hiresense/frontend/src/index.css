@@ -38,7 +38,7 @@
   --shadow-pop: 0 20px 44px -20px rgba(18, 20, 28, 0.24), 0 6px 14px -8px rgba(18, 20, 28, 0.1);
 }
 
-/* Dark palette — Vercel/Linear-inspired: layered near-blacks, never pure
+/* Dark palette - Vercel/Linear-inspired: layered near-blacks, never pure
    black, text slightly desaturated rather than pure white for less glare. */
 .dark {
   --color-ink: #edeef2;
@@ -175,7 +175,7 @@
   .hover-lift {
     transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
   }
-  /* Only lift on devices with a real pointer — on touch, hover states stick. */
+  /* Only lift on devices with a real pointer - on touch, hover states stick. */
   @media (hover: hover) {
     .hover-lift:hover {
       transform: translateY(-2px);

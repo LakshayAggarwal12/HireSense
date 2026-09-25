@@ -17,7 +17,7 @@ let gradientCounter = 0;
 
 /**
  * Circular score visualization used for ATS score, semantic similarity,
- * skill overlap, and composite match score — one consistent shape for
+ * skill overlap, and composite match score - one consistent shape for
  * every number this product produces. Fills from 0 on mount and uses a
  * subtle two-tone gradient per score band instead of a flat stroke.
  */

@@ -2,7 +2,7 @@
 PDF resume parser.
 
 Extracts both plain text (for NLP/skill extraction) and layout metadata
-(for ATS parseability checks — e.g. detecting multi-column layouts that
+(for ATS parseability checks - e.g. detecting multi-column layouts that
 break real-world ATS parsers).
 """
 from dataclasses import dataclass, field

@@ -1,7 +1,7 @@
 """
 Given a list of extracted skills, ranks job fields by how strongly those
 skills point toward each one. Purely a weighted-sum over the
-SkillFieldRelevance table — same "explainable, not a black box" philosophy
+SkillFieldRelevance table - same "explainable, not a black box" philosophy
 as the ATS checker: every score is traceable to which skills contributed
 and by how much.
 """

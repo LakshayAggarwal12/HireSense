@@ -148,7 +148,7 @@ export default function RankingTable({ rankings, selectedIds = [], onToggleSelec
                         <ul className="space-y-1.5">
                           {r.suggestions.map((s, i) => (
                             <li key={i} className="text-xs text-ink-soft leading-relaxed flex gap-2">
-                              <span className="text-accent shrink-0">—</span>
+                              <span className="text-accent shrink-0">-</span>
                               {s}
                             </li>
                           ))}

@@ -3,10 +3,10 @@ Skill extraction engine.
 
 Deliberately uses a curated taxonomy + spaCy PhraseMatcher instead of raw
 NER. Generic NER models are unreliable at picking "React.js" or "CI/CD" out
-of resume text — a matched vocabulary is far more precise for this domain,
+of resume text - a matched vocabulary is far more precise for this domain,
 and it's what production ATS-style tools actually do.
 
-The taxonomy now lives in the database (Skill/SkillCategory tables — see
+The taxonomy now lives in the database (Skill/SkillCategory tables - see
 app/models/models.py and scripts/seed_skills.py), not a static JSON file.
 Run scripts/seed_skills.py once before extraction will find anything.
 """
@@ -38,7 +38,7 @@ EDUCATION_KEYWORDS = [
 def _load_taxonomy() -> dict[str, str]:
     """
     Returns {lowercased phrase: canonical skill name}, covering both each
-    skill's canonical name and all of its aliases — so "ReactJS" and
+    skill's canonical name and all of its aliases - so "ReactJS" and
     "React.js" both resolve to the single canonical skill "React" instead
     of being treated as separate skills, which is an improvement over the
     old static-JSON version where every alias was its own distinct entry.
@@ -48,7 +48,7 @@ def _load_taxonomy() -> dict[str, str]:
         rows = db.query(Skill).all()
         if not rows:
             print(
-                "WARNING: skills table is empty — skill extraction will find "
+                "WARNING: skills table is empty - skill extraction will find "
                 "nothing until you run scripts/seed_skills.py",
                 file=sys.stderr,
             )
@@ -64,7 +64,7 @@ def _load_taxonomy() -> dict[str, str]:
 
 @lru_cache
 def _get_nlp():
-    # Loaded once per process (lru_cache) — loading spaCy models is expensive,
+    # Loaded once per process (lru_cache) - loading spaCy models is expensive,
     # never do this per-request.
     return spacy.load("en_core_web_sm")
 
@@ -127,7 +127,7 @@ def extract_education(text: str) -> list[str]:
 def extract_experience_years(text: str) -> float | None:
     """
     Best-effort extraction: finds all "X years" mentions and returns the max.
-    This is intentionally simple for Day 1 — good enough for ranking context,
+    This is intentionally simple for Day 1 - good enough for ranking context,
     not a precise work-history parser.
     """
     matches = EXPERIENCE_RE.findall(text)
@@ -139,7 +139,7 @@ def extract_name(text: str, filename: str) -> str | None:
     """
     Heuristic: assume the candidate's name is on the first non-empty line
     if it looks like a name (2-4 title-case words, no digits/@ symbols).
-    Falls back to None — better an honest gap than a wrong guess.
+    Falls back to None - better an honest gap than a wrong guess.
     """
     for line in text.splitlines():
         line = line.strip()

@@ -19,12 +19,12 @@ export default function LandingFooter() {
             <Brand size="md" nameClassName="text-base" />
             <p className="text-xs text-ink-soft leading-relaxed mt-3.5 max-w-sm">
               AI-powered resume screening and candidate ranking. Parses resumes, scores ATS
-              parseability and ranks candidates against a job description — with the reasoning shown
+              parseability and ranks candidates against a job description - with the reasoning shown
               rather than hidden.
             </p>
             <p className="text-[11px] text-ink-soft leading-relaxed mt-4 max-w-sm">
               The hosted backend runs on a free tier, so the first request after a period of
-              inactivity can take 30–60 seconds while it wakes up. Later requests are fast.
+              inactivity can take 30-60 seconds while it wakes up. Later requests are fast.
             </p>
           </div>
 

@@ -2,25 +2,25 @@
 JD-matching engine.
 
 Combines two independent signals into one composite ranking score:
-  1. Content similarity  — does the resume's overall content overlap with
+  1. Content similarity  - does the resume's overall content overlap with
      the JD's vocabulary? (TF-IDF + cosine similarity)
-  2. Skill overlap        — of the skills explicitly required by the JD,
+  2. Skill overlap        - of the skills explicitly required by the JD,
      what % does this candidate actually have? (exact taxonomy match)
 
 NOTE ON APPROACH: this uses TF-IDF (term-frequency vocabulary matching) via
 scikit-learn rather than transformer sentence embeddings
 (sentence-transformers/torch). That's a deliberate memory tradeoff, not an
-oversight — torch's runtime memory footprint (400-600MB+) doesn't fit
+oversight - torch's runtime memory footprint (400-600MB+) doesn't fit
 comfortably on free-tier hosting (e.g. Render's 512MB limit), and this
 avoids that entirely with no cost and no external API calls. The real
-tradeoff: TF-IDF matches on shared vocabulary, not meaning — it won't
+tradeoff: TF-IDF matches on shared vocabulary, not meaning - it won't
 recognize that "built REST APIs" and "backend development experience" are
 related since they share almost no literal words. For resume-vs-JD
 matching specifically this is a softer loss than it sounds, since resumes
 and JDs both lean heavily on literal tech/skill terms, which is exactly
 what TF-IDF is good at. If memory constraints go away later (paid hosting,
 a bigger instance), swapping back to sentence-transformers is a
-self-contained change to compute_semantic_similarity() below — nothing
+self-contained change to compute_semantic_similarity() below - nothing
 else in this file or its callers needs to change, since the function
 signature and 0-100 output scale stay identical either way.
 
@@ -36,7 +36,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from app.nlp.skill_extractor import extract_skills
 
 # Weights for the composite score. Skill overlap weighted higher than
-# content similarity here — with TF-IDF (vocabulary-based, not meaning-
+# content similarity here - with TF-IDF (vocabulary-based, not meaning-
 # based), exact skill matches are a more reliable signal than the general
 # content-overlap score.
 SEMANTIC_WEIGHT = 0.5
@@ -48,7 +48,7 @@ def compute_semantic_similarity(resume_text: str, jd_text: str) -> float:
     Returns a 0-100 score for how similar the two texts are, via TF-IDF +
     cosine similarity. Named compute_semantic_similarity (not
     compute_content_similarity) to keep the function signature/name stable
-    for every caller — only the internal implementation changed.
+    for every caller - only the internal implementation changed.
     """
     if not resume_text.strip() or not jd_text.strip():
         return 0.0
@@ -68,11 +68,11 @@ def compute_semantic_similarity(resume_text: str, jd_text: str) -> float:
 def compute_skill_overlap(candidate_skills: list[str], jd_skills: list[str]) -> dict:
     """
     Returns overlap percentage plus the matched/missing skill lists, so the
-    UI can show exactly which required skills were found vs. absent —
+    UI can show exactly which required skills were found vs. absent -
     that breakdown is more useful to the reader than the percentage alone.
     """
     if not jd_skills:
-        # No skills detected in the JD at all — overlap is undefined, not
+        # No skills detected in the JD at all - overlap is undefined, not
         # zero. Returning 0 here would unfairly punish every candidate for
         # a JD that just didn't mention skills explicitly (e.g. a vague JD).
         return {"overlap_pct": 0.0, "matched": [], "missing": [], "jd_skills_found": False}

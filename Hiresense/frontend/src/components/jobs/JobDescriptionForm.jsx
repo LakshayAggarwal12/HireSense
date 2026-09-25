@@ -57,7 +57,7 @@ export default function JobDescriptionForm({ onCreated }) {
           label="Description"
           value={rawText}
           onChange={(e) => setRawText(e.target.value)}
-          placeholder="Paste the full job description here — required skills, experience level, responsibilities..."
+          placeholder="Paste the full job description here - required skills, experience level, responsibilities..."
           rows={7}
           hint="Paste the raw text. The more detail it contains, the better the skill extraction."
         />

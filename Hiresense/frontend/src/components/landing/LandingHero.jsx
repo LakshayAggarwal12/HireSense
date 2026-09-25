@@ -69,7 +69,7 @@ function CheckRow({ check }) {
       <div className="min-w-0">
         <p className="text-xs font-medium text-ink">
           {check.name}
-          <span className="sr-only"> — {check.passed ? "passed" : "needs attention"}</span>
+          <span className="sr-only"> - {check.passed ? "passed" : "needs attention"}</span>
         </p>
         <p className="text-[11px] text-ink-soft leading-relaxed">{check.detail}</p>
       </div>
@@ -181,7 +181,7 @@ export default function LandingHero() {
 
             <Reveal delay={0.05}>
               <h1 className="mt-5 font-display font-bold tracking-tight text-ink text-[2.15rem] leading-[1.12] sm:text-[2.9rem] sm:leading-[1.08] lg:text-[3.15rem]">
-                Screen resumes and rank candidates —
+                Screen resumes and rank candidates -
                 <span className="text-accent"> with every score explained.</span>
               </h1>
             </Reveal>
@@ -190,7 +190,7 @@ export default function LandingHero() {
               <p className="mt-5 text-base sm:text-[1.0625rem] text-ink-soft leading-relaxed max-w-xl">
                 HireSense parses PDF and DOCX resumes, scores how well an ATS can read them across
                 seven weighted checks, then ranks every candidate against your job description using
-                TF-IDF content similarity and exact skill overlap — with the matched and missing
+                TF-IDF content similarity and exact skill overlap - with the matched and missing
                 skills behind each number.
               </p>
             </Reveal>

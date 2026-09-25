@@ -2,8 +2,8 @@
 Authentication routes: register, login, and current-user lookup.
 
 Two login endpoints exist deliberately:
-  - POST /api/auth/login        JSON body — what the React frontend calls
-  - POST /api/auth/login/form   OAuth2 form body — what Swagger UI's
+  - POST /api/auth/login        JSON body - what the React frontend calls
+  - POST /api/auth/login/form   OAuth2 form body - what Swagger UI's
                                 "Authorize" button needs to work at /docs
 Both issue an identical token; the second exists purely so the interactive
 docs remain usable for manual testing.
@@ -48,7 +48,7 @@ def register(payload: UserRegisterIn, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(user)
 
-    # Log the user straight in after registering — avoids an immediate
+    # Log the user straight in after registering - avoids an immediate
     # second round-trip to /login from the frontend.
     return _issue_token(user)
 
@@ -58,7 +58,7 @@ def login(payload: UserLoginIn, db: Session = Depends(get_db)):
     email = payload.email.lower().strip()
     user = db.query(User).filter(User.email == email).first()
 
-    # Deliberately identical error for "no such user" and "wrong password" —
+    # Deliberately identical error for "no such user" and "wrong password" -
     # distinguishing them would let an attacker enumerate registered emails.
     if not user or not verify_password(payload.password, user.hashed_password):
         raise HTTPException(

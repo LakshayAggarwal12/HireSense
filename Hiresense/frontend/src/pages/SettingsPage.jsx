@@ -186,7 +186,7 @@ export default function SettingsPage() {
           <p className="text-xs text-ink-soft leading-relaxed mt-1 mb-4">
             Clears {candidates.length} candidate(s) and {jobDescriptions.length} job description(s)
             tracked in this browser session. This does not delete records from the backend database
-            — only from this browser&apos;s local view of them.
+            - only from this browser&apos;s local view of them.
           </p>
           <Button
             variant="danger"

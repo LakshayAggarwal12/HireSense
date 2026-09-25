@@ -6,7 +6,7 @@ const STEPS = [
   {
     icon: LuUpload,
     title: "Upload resumes",
-    body: "Drop in PDF or DOCX files. Each one is parsed into structured data — skills, contact details, education, experience — and scored for ATS parseability straight away.",
+    body: "Drop in PDF or DOCX files. Each one is parsed into structured data - skills, contact details, education, experience - and scored for ATS parseability straight away.",
     facts: ["PDF · DOCX", "Up to 5MB each"],
     next: "Describe the role",
   },
@@ -78,7 +78,7 @@ export default function LandingWorkflow() {
         <Reveal delay={0.1}>
           <p className="mt-6 text-xs text-ink-soft">
             Rankings are stored per candidate × role, so re-running them after adding a new resume is
-            a single click — not a re-upload.
+            a single click - not a re-upload.
           </p>
         </Reveal>
       </div>

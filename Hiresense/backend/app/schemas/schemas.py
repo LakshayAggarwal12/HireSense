@@ -1,5 +1,5 @@
 """
-Pydantic schemas — the API's public contract, kept separate from the ORM
+Pydantic schemas - the API's public contract, kept separate from the ORM
 models so internal DB structure can change without breaking clients.
 """
 from datetime import datetime

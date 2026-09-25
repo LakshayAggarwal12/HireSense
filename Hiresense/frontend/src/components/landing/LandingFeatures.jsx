@@ -12,7 +12,7 @@ const FEATURES = [
   {
     icon: LuFileText,
     title: "Resume parsing",
-    body: "PDF and DOCX text extraction with layout analysis that flags multi-column layouts, embedded images and non-ASCII noise — the things that quietly break an ATS read.",
+    body: "PDF and DOCX text extraction with layout analysis that flags multi-column layouts, embedded images and non-ASCII noise - the things that quietly break an ATS read.",
   },
   {
     icon: LuListChecks,
@@ -47,7 +47,7 @@ export default function LandingFeatures() {
         <SectionHeading
           eyebrow="What it does"
           title="Four pieces, one screening pipeline."
-          body="HireSense covers the whole path from a raw resume file to a ranked shortlist — and keeps the reasoning for every score it produces."
+          body="HireSense covers the whole path from a raw resume file to a ranked shortlist - and keeps the reasoning for every score it produces."
         />
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

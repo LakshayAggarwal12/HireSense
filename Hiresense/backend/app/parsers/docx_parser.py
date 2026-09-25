@@ -13,7 +13,7 @@ def parse_docx(file_path: str) -> ParsedDocument:
         document = docx.Document(file_path)
 
         paragraphs = [p.text for p in document.paragraphs]
-        # Tables are a common ATS-parseability failure point in DOCX resumes —
+        # Tables are a common ATS-parseability failure point in DOCX resumes -
         # extract their text too so skill extraction still works, but we track
         # table presence separately for the ATS checker.
         table_text: list[str] = []

@@ -15,7 +15,7 @@ export default function LandingCta() {
               </h2>
               <p className="text-sm sm:text-base text-ink-soft leading-relaxed mt-3.5 max-w-xl mx-auto">
                 Create an account, upload a resume and see the ATS breakdown and ranking for
-                yourself. The skills dataset seeds itself on first boot — there is no setup step.
+                yourself. The skills dataset seeds itself on first boot - there is no setup step.
               </p>
 
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">

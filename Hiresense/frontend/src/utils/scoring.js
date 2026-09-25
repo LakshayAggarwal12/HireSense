@@ -16,6 +16,6 @@ export const SCORE_COLORS = {
 };
 
 export function formatScore(score) {
-  if (score === null || score === undefined) return "—";
+  if (score === null || score === undefined) return "-";
   return Math.round(score * 10) / 10;
 }

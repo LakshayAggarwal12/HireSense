@@ -4,7 +4,7 @@ import { getHealth } from "../services/systemService";
 const POLL_INTERVAL_MS = 30000;
 
 /**
- * Real backend connectivity check — pings the actual /health endpoint from
+ * Real backend connectivity check - pings the actual /health endpoint from
  * Day 1's main.py. Not a fake status pill; if your backend is down, this
  * will genuinely show "offline".
  */

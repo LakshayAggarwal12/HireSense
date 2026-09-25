@@ -17,7 +17,7 @@ export default function LoginPage() {
   const [attempted, setAttempted] = useState(false);
   const formRef = useRef(null);
 
-  // Keyboard users shouldn't have to hunt for the field that failed —
+  // Keyboard users shouldn't have to hunt for the field that failed -
   // move focus to the first invalid input after a rejected submit.
   useEffect(() => {
     if (!attempted) return;

@@ -17,7 +17,7 @@ def generate_match_suggestions(
     suggestions: list[str] = []
 
     if missing_skills:
-        # Cap the list shown — beyond ~6 it stops being actionable and
+        # Cap the list shown - beyond ~6 it stops being actionable and
         # starts being overwhelming.
         shown = missing_skills[:6]
         remainder = len(missing_skills) - len(shown)
@@ -34,7 +34,7 @@ def generate_match_suggestions(
         suggestions.append(
             "Overall content similarity to this JD is low. The resume's summary and "
             "experience bullets may be using very different language than the role "
-            "actually describes — consider mirroring the JD's terminology where it "
+            "actually describes - consider mirroring the JD's terminology where it "
             "genuinely applies to your experience."
         )
     elif semantic_similarity < 65:

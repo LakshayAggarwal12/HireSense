@@ -15,7 +15,7 @@ const VARIANTS = {
 
 /**
  * Square icon-only control used across the chrome (topbar, sidebar, panels).
- * `label` is mandatory — it becomes both the accessible name and the tooltip,
+ * `label` is mandatory - it becomes both the accessible name and the tooltip,
  * so an icon button can never end up unlabelled.
  *
  * Pass `to` to render a router link in the same style instead of nesting a

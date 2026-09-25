@@ -19,7 +19,7 @@ const router = createBrowserRouter([
     element: <LandingPage />,
   },
   {
-    // Auth pages — redirect away if already signed in.
+    // Auth pages - redirect away if already signed in.
     element: <PublicOnlyRoute />,
     children: [
       { path: "/login", element: <LoginPage /> },

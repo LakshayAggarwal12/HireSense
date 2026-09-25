@@ -3,12 +3,12 @@ import { LuDatabase, LuFileCheck, LuSparkles } from "react-icons/lu";
 import Brand from "../ui/Brand";
 import ThemeToggle from "../ui/ThemeToggle";
 
-// Grounded in what the product actually does — no invented marketing claims.
+// Grounded in what the product actually does - no invented marketing claims.
 const HIGHLIGHTS = [
   {
     icon: LuFileCheck,
     title: "ATS parseability, itemised",
-    body: "Seven weighted checks — text extraction, section headers, layout, contact info, images, special characters and length — each with a reason and a suggested fix.",
+    body: "Seven weighted checks - text extraction, section headers, layout, contact info, images, special characters and length - each with a reason and a suggested fix.",
   },
   {
     icon: LuSparkles,
@@ -26,7 +26,7 @@ const HIGHLIGHTS = [
  * Shared shell for /login and /register.
  *
  * On large screens the form sits next to a brand panel that already answers
- * "what is this product?" — so both pages stay visually identical without
+ * "what is this product?" - so both pages stay visually identical without
  * duplicating branding, capability copy or the layout itself. Below lg the
  * panel drops away and the form uses the full width.
  */
@@ -48,7 +48,7 @@ export default function AuthLayout({ title, subtitle, children, footer }) {
           </h2>
           <p className="text-sm text-ink-soft leading-relaxed mt-3 max-w-md">
             Every score HireSense produces comes from rule-based checks, weighted formulas and a
-            queryable skills database — not an opaque model output.
+            queryable skills database - not an opaque model output.
           </p>
 
           <ul className="mt-9 space-y-7 max-w-md">

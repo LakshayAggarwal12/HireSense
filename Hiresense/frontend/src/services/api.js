@@ -32,7 +32,7 @@ api.interceptors.response.use(
 
     if (status === 401) {
       const onAuthPage = ["/login", "/register"].includes(window.location.pathname);
-      // Don't redirect on a failed login attempt — the form shows the error
+      // Don't redirect on a failed login attempt - the form shows the error
       // itself, and bouncing the page would wipe what the user typed.
       const isAuthRequest = error?.config?.url?.includes("/api/auth/");
       if (!onAuthPage && !isAuthRequest) {

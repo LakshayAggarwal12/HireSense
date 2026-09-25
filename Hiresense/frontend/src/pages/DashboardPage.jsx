@@ -53,7 +53,7 @@ export default function DashboardPage() {
           <StatCard
             icon={LuFileCheck}
             label="Average ATS score"
-            value={avgAtsScore !== null ? `${avgAtsScore}` : "—"}
+            value={avgAtsScore !== null ? `${avgAtsScore}` : "-"}
             hint={avgAtsScore !== null ? "Out of 100" : "Upload a resume to see this"}
           />
         </motion.div>

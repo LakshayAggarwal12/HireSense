@@ -13,7 +13,7 @@ const SIGNALS = [
   {
     icon: LuLayers,
     title: "Content similarity",
-    detail: "TF-IDF vectors compared with cosine similarity across the whole document — so wording and context both count.",
+    detail: "TF-IDF vectors compared with cosine similarity across the whole document - so wording and context both count.",
   },
   {
     icon: LuSparkles,
@@ -24,7 +24,7 @@ const SIGNALS = [
 
 const PRINCIPLES = [
   "Every ranking result carries its matched skills, missing skills and per-candidate suggestions.",
-  "ATS parseability and content quality are scored separately — a resume can be strong at one and weak at the other.",
+  "ATS parseability and content quality are scored separately - a resume can be strong at one and weak at the other.",
   "No third-party AI API is called per resume: parsing, matching and scoring all run on your own backend.",
 ];
 
@@ -42,7 +42,7 @@ export default function LandingExplainability() {
           <div>
             <SectionHeading
               eyebrow="Why it's different"
-              title="Not a black box — a number you can argue with."
+              title="Not a black box - a number you can argue with."
               body="A score is only useful if you can tell whether to trust it. HireSense keeps the whole path visible: what was read from the file, what matched, what didn't."
             />
 

@@ -4,7 +4,7 @@ spellings, and a set of (field, weight) pairs indicating how relevant that
 skill is to different job fields (0-1 scale). This drives both skill
 extraction (skill_extractor.py) and field detection (field_detector.py).
 
-Not every skill has field weights assigned — general tools like Git aren't
+Not every skill has field weights assigned - general tools like Git aren't
 strongly diagnostic of any one field, so they're left field-less on purpose
 rather than assigned an arbitrary weight.
 """

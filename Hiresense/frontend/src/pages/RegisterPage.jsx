@@ -98,7 +98,7 @@ export default function RegisterPage() {
           onChange={setField("full_name")}
           placeholder="Your name"
           autoComplete="name"
-          hint="Optional — used to label your account."
+          hint="Optional - used to label your account."
         />
         <AuthField
           label="Work email"

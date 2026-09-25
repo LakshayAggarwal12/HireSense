@@ -29,7 +29,7 @@ export function AppDataProvider({ children }) {
       setCandidates(candidatesData);
       setJobDescriptions(jdData);
     } catch {
-      // Backend unreachable — leave whatever is already rendered in place.
+      // Backend unreachable - leave whatever is already rendered in place.
       // ApiStatusPill surfaces the outage separately, so wiping the screen
       // here would remove information without adding any.
     } finally {
@@ -71,7 +71,7 @@ export function AppDataProvider({ children }) {
 
   /**
    * "Clear session data" in Settings: drops the locally cached view only.
-   * The records stay in the database, so the next refresh restores them —
+   * The records stay in the database, so the next refresh restores them -
    * which is exactly what the copy on that button promises.
    */
   const clearAll = useCallback(() => {

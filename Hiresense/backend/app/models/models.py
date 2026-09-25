@@ -3,7 +3,7 @@ ORM models.
 
 Ownership model: Candidate and JobDescription each carry a user_id, so every
 query can be scoped to the authenticated user. Downstream rows (ATSReport,
-MatchScore) inherit ownership through their parent — they are never queried
+MatchScore) inherit ownership through their parent - they are never queried
 without going through a candidate/JD the user already owns, so they don't
 need their own user_id column.
 """
@@ -34,7 +34,7 @@ class User(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False, index=True)
     full_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    # bcrypt hash — the plaintext password is never stored or logged anywhere.
+    # bcrypt hash - the plaintext password is never stored or logged anywhere.
     hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
@@ -133,7 +133,7 @@ class ATSReport(Base):
 
 
 # ---------------------------------------------------------------------------
-# Skills taxonomy dataset (shared across all users — reference data, not
+# Skills taxonomy dataset (shared across all users - reference data, not
 # user-owned content, so these tables intentionally have no user_id).
 # ---------------------------------------------------------------------------
 

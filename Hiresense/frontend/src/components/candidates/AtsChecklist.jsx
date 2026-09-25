@@ -6,7 +6,7 @@ import { getScoreBand, SCORE_COLORS } from "../../utils/scoring";
  * Renders the v2 ATS report: checks grouped by category, each showing the
  * points actually earned out of the points available.
  *
- * Handles v1 reports too — older ATS reports saved before the category
+ * Handles v1 reports too - older ATS reports saved before the category
  * upgrade have no `category` field on their checks, so those fall back to a
  * single ungrouped list rather than rendering an empty screen.
  */

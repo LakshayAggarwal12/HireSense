@@ -101,7 +101,7 @@ async def upload_resume(
     if not parsed.raw_text:
         raise HTTPException(
             status_code=422,
-            detail="No text could be extracted from this file. It may be a scanned image — "
+            detail="No text could be extracted from this file. It may be a scanned image - "
                    "try uploading a text-based PDF or DOCX.",
         )
 

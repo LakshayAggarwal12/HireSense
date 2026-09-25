@@ -1,5 +1,5 @@
 """
-Job descriptions and candidate ranking — all routes authenticated and
+Job descriptions and candidate ranking - all routes authenticated and
 scoped to the current user's own candidates and job descriptions.
 """
 from fastapi import APIRouter, Depends, HTTPException

@@ -18,7 +18,7 @@ const BANDS = {
 /**
  * Client-side password feedback for the register form.
  *
- * Advisory only — it never blocks submission. The backend's own rule
+ * Advisory only - it never blocks submission. The backend's own rule
  * (min length 8) stays the source of truth, and this deliberately mirrors
  * just that rule as a requirement so the two can't contradict each other.
  */
@@ -59,7 +59,7 @@ export default function PasswordStrength({ password }) {
               <LuCheck className="h-2.5 w-2.5" />
             </span>
             <span className={r.met ? "text-ink" : ""}>{r.label}</span>
-            <span className="sr-only">{r.met ? " — met" : " — not met"}</span>
+            <span className="sr-only">{r.met ? " - met" : " - not met"}</span>
           </li>
         ))}
       </ul>

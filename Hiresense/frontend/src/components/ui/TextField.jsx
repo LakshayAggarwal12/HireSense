@@ -3,7 +3,7 @@ import { LuCircleAlert } from "react-icons/lu";
 
 /**
  * Labelled input/textarea used by the app's content forms (e.g. the job
- * description form). Errors are announced with an icon *and* text — the
+ * description form). Errors are announced with an icon *and* text - the
  * message never depends on a red border alone.
  */
 export default function TextField({

@@ -40,7 +40,7 @@ def _auto_seed_skills_if_empty():
     try:
         if db.query(Skill).count() > 0:
             return
-        print("Skills table is empty — auto-seeding taxonomy dataset...", file=sys.stderr)
+        print("Skills table is empty - auto-seeding taxonomy dataset...", file=sys.stderr)
         from scripts.seed_skills import seed
         seed()
     except Exception as exc:
@@ -53,7 +53,7 @@ def _auto_seed_skills_if_empty():
 _auto_seed_skills_if_empty()
 
 app = FastAPI(
-    title="HireSense — Resume Screening & Candidate Ranking API",
+    title="HireSense - Resume Screening & Candidate Ranking API",
     description="Parses resumes, scores ATS parseability and content quality, "
                 "and ranks candidates against job descriptions.",
     version="2.0.0",
